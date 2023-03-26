@@ -3,10 +3,46 @@ const { DataTypes } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('country', {
+  sequelize.define('Country', {
+    id: {
+      type: DataTypes.STRING(3), // código de 3 letras
+      primaryKey: true,
+      allowNull: false, // No se permite que el campo este vacío
+    },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
-  });
+    flag: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    continent: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    capital:{
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    population: {
+      type: DataTypes.INTEGER,
+    },
+    // Datos no obligatorios
+    subregion: {
+      type: DataTypes.STRING,
+    },
+    area: {
+      type: DataTypes.FLOAT,
+    },
+    createdDb: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false, 
+      defaultValue: true
+    }
+  },
+  {
+    timestamps:false
+  }
+  ); // no permite crear campos createdAt y updatedAt
 };

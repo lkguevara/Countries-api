@@ -17,6 +17,7 @@ const getAllCountries = async () => {
             name: country.name, 
             flag: country.flag,
             continent: country.region,
+            capital: country.capital,
             population: country.population
         }
     }
@@ -26,11 +27,41 @@ const getAllCountries = async () => {
     return [ ...countries, ...countriesDB ]
 }
 
+// * Obtener un pais por nombre
+const countryName = async (name) => {
+    // buscar en la db
+    const countryDB = await Country.findOne({
+        where: {
+            name: name
+        }
+    })
+
+    // api  
+    const countryApi = await axios.get(`https://restcountries.com/v2/name/${name}`)
+    const country = countryApi.data.map((country) => {
+        return {
+            id: country.id,
+            name: country.name, 
+            flag: country.flag,
+            continent: country.region,
+            capital: country.capital,
+            population: country.population,
+            createdDb: false
+        }
+    }
+    )
+
+    // hacer un filtro
+    const countryFilter = country.filter((country) => country.name.toLowerCase() === name.toLowerCase())
+
+    // concatena
+    return [ ...countryFilter, countryDB ]
+}
 
 
 
 // exports
 module.exports = {
     getAllCountries,
-    // countryName
+    countryName
 }

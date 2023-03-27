@@ -1,5 +1,5 @@
 // importo los controladores
-const { getAllCountries, getCountryById } = require('../controllers/countriesController')
+const { getAllCountries, countryName, getCountryById } = require('../controllers/countriesController')
 
 
 // * Obtener todos los paises o por nombre

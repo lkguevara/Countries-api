@@ -18,7 +18,20 @@ const getAllCountriesHandler = async (req, res) => {
     }
 }
 
+// * Obtener un pais por id
+const getCountryByIdHandler = async (req, res) => {
+    const { id } = req.params
+
+    try {
+        const response = await getCountryById(id)
+        res.status(200).json(response)
+    }
+    catch (error) {
+        res.status(400).json({error: error.message})
+    }
+}
+
 module.exports = {
     getAllCountriesHandler,
-    // getCountryByIdHandler
+    getCountryByIdHandler
 }

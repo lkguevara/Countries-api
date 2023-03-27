@@ -7,15 +7,15 @@ const getAllCountries = async () => {
     // traigo todos los paises de la bd
     const countriesDB = await Country.findAll();
 
-    // Traer los paises de la api
-    const countriesApi = await axios.get('https://restcountries.com/v2/all');
+    // Traer solo 40 paises de la api
+    const countriesApi = await axios.get('https://restcountries.com/v3.1/all');
 
     // mapeo los paises de la api
     const countries = await countriesApi.data.map((country) => {
         return {
-            id: country.id,
-            name: country.name, 
-            flag: country.flag,
+            id: country.cca3,
+            name: country.name.common, 
+            flag: country.flags.svg,
             continent: country.region,
             capital: country.capital,
             population: country.population
@@ -34,28 +34,78 @@ const countryName = async (name) => {
         where: {
             name: name
         }
-    })
+    });
 
-    // api  
-    const countryApi = await axios.get(`https://restcountries.com/v2/name/${name}`)
+    // Si se encuentra en la base de datos, se devuelve directamente
+    if (countryDB) {
+        return [countryDB];
+    }
+
+    // si no está en la base de datos, buscar en la API
+    const countryApi = await axios.get(`https://restcountries.com/v3.1/name/${name}`)
     const country = countryApi.data.map((country) => {
         return {
-            id: country.id,
-            name: country.name, 
-            flag: country.flag,
+            id: country.cca3,
+            name: country.name.common, 
+            flag: country.flags.svg,
             continent: country.region,
             capital: country.capital,
-            population: country.population,
-            createdDb: false
+            population: country.population
         }
     }
     )
 
-    // hacer un filtro
-    const countryFilter = country.filter((country) => country.name.toLowerCase() === name.toLowerCase())
+    // Si no se encontró nada en la API, se devuelve null
+    if (country.length === 0) {
+        return null;
+    }
 
-    // concatena
-    return [ ...countryFilter, countryDB ]
+    return country;
+
+}
+
+// * Obtener un pais por id
+const getCountryById = async (id) => {
+    id = id.toLowerCase(); // metodo para pasar a minuscula
+
+    // si el id =! a 3 caracteres mandar mensaje de error
+    if (id.length !== 3) {
+        return 'El id debe tener 3 caracteres';
+    }
+
+    // buscar en la db
+    const countryDB = await Country.findOne({
+        where: {
+            id: id
+        }
+    });
+
+    // Si se encuentra en la base de datos, se devuelve directamente
+    if (countryDB) {
+        return countryDB;
+    }
+
+    // si no está en la base de datos, buscar en la API
+    const countryApi = await axios.get(`https://restcountries.com/v3.1/alpha/${id}`)
+    const country = countryApi.data.map((country) => {
+        return {
+            id: country.cca3,
+            name: country.name.common, 
+            flag: country.flags.svg,
+            continent: country.region,
+            capital: country.capital,
+            population: country.population
+        }
+    }
+    )
+
+    // Si no se encontró nada en la API, se devuelve null
+    if (country.length === 0) {
+        return null;
+    }
+
+    return country;
+    
 }
 
 
@@ -63,5 +113,6 @@ const countryName = async (name) => {
 // exports
 module.exports = {
     getAllCountries,
-    countryName
+    countryName,
+    getCountryById
 }

@@ -21,7 +21,7 @@ const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 
 // Syncing all the models at once.
-conn.sync({ force: true }).then(() => {
+conn.sync({ alter: true }).then(() => { // alter es para que no borre la base de datos. se diferencia de force en que force borra la base de datos y alter no
   server.listen(3001, () => {
     console.log('%s listening at 3001'); // eslint-disable-line no-console
   });

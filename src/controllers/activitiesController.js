@@ -9,6 +9,12 @@ const postActivities = async (name, level, duration, season, countryId) => {
         season,
     })
 
+    const country = await Country.findByPk(countryId);
+
+    if (!country) {
+      throw new Error(`Country with ID ${countryId} not found`);
+    }
+
     await newActivity.addCountry(countryId)
 
     return newActivity

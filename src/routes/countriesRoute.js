@@ -2,6 +2,7 @@ const { Router } = require("express");
 // Imports Handlers
 const { getAllCountriesHandler,  getCountryByIdHandler} = require ('../handlers/countriesHandler')
 
+// config router
 const countriesRouter = Router();
 
 // rutas

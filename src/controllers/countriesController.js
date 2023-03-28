@@ -7,7 +7,6 @@ const getAllCountries = async () => {
     // traigo todos los paises de la bd
     const countriesDB = await Country.findAll();
 
-    // Traer solo 40 paises de la api
     const countriesApi = await axios.get('https://restcountries.com/v3.1/all');
 
     // mapeo los paises de la api

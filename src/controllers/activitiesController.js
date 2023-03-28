@@ -9,6 +9,7 @@ const postActivities = async (name, level, duration, season, countryId) => {
         season,
     })
 
+    // Buscqr el id recibido
     const country = await Country.findByPk(countryId);
 
     if (!country) {

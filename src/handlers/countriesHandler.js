@@ -19,8 +19,10 @@ const getAllCountriesHandler = async (req, res) => {
                     id: country.id,
                     name: country.name,
                     flag: country.flag,
-                    continet: country.continet,
-                    population: country.population
+                    population: country.population,
+                    capital: country.capital,
+                    // continente
+                    continent: country.continent,
                 }
             });
 

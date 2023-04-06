@@ -1,5 +1,4 @@
 const { Country, Activity } = require ('../db');
-const axios = require('axios');
 
 const postActivities = async (name, level, duration, season, countryId) => {
     const newActivity = await Activity.create({
@@ -7,19 +6,23 @@ const postActivities = async (name, level, duration, season, countryId) => {
         level,
         duration,
         season,
-    })
+    });
 
-    // Buscqr el id recibido
-    const country = await Country.findByPk(countryId);
+    // Buscar los países por id
+    const countries = await Country.findAll({
+        where: {
+            id: countryId
+        }
+    });
 
-    if (!country) {
-      throw new Error(`Country with ID ${countryId} not found`);
+    
+
+    for (const country of countries) {
+        await newActivity.addCountry(country);
     }
 
-    await newActivity.addCountry(countryId)
-
-    return newActivity
-}
+    return newActivity;
+};
 
 
 module.exports = {

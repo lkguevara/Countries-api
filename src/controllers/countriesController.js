@@ -13,7 +13,7 @@ const countryName = async (name) => {
                   through:{
                       attributes:[],
                   }
-              },
+        },
     })
   
     return countrybyName
@@ -28,7 +28,14 @@ const getCountryById = async (id) => {
           id: {
             [Op.iLike]: id // iLike es para que no sea case sensitive (no importa si es mayuscula o minuscula) y el op sirve para hacer operaciones
           }
-        }
+        },
+
+        include: {
+            model: Activity,
+            through:{
+                attributes:[],
+            }
+  },
       });
 
     //   si no se encuentra mandar un error
